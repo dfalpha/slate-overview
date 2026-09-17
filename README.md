@@ -33,16 +33,16 @@ I'm [Shawn Snider](https://shawnsnider.me). The longer story is on that site.
 
 ## By the numbers
 
-Measured in September 2026, six weeks after the first commit.
+Measured on 17 September 2026, six weeks after the first commit.
 
 | | |
 |---|---|
 | From empty repository to production in my house | **6 weeks** |
-| Lines of TypeScript and Kotlin | **~340,000** |
-| Automated tests | **~7,400** |
-| Device and service integrations | **17** |
+| Lines of TypeScript and Kotlin | **~370,000** |
+| Automated tests | **~9,900** |
+| Device and service integrations | **18** |
 | Codebases | **5**: server, tablet, admin, phone, viewer |
-| Commits | **1,500+** |
+| Commits | **1,600+** |
 
 ## The whole house, in one place
 
@@ -232,9 +232,9 @@ Every switched device is named and typed once. The ones marked as lights join **
 
 **Promotion is deliberate, not automatic.** Every merge to `main` publishes a server image and distributes a tablet build to the dev group. The house moves to a new version only when I push a version tag, or dispatch the tablet promotion with the exact CI run whose build I want. What is promoted is the artifact CI already built and tested, and the installer files are mirrored to [slate-dist](https://github.com/dfalpha/slate-dist) on every promotion.
 
-**Tested at the cheapest level that proves the point.** Roughly 7,400 automated tests across the server, the shared package, the two web clients and the tablet app. Anything that needs a real device goes on a human-only checklist.
+**Tested at the cheapest level that proves the point.** Roughly 9,900 automated tests across the server, the shared package, the two web clients and the tablet app. Anything that needs a real device goes on a human-only checklist.
 
-**An operating contract for AI-assisted engineering.** I built Slate using Claude Code as the primary engineering tool, working under a written contract that fixes the constraints already decided, the workflow (plan first and get the plan approved, one issue per branch, a pull request into `main`, and `main` always runnable) and the definition of done. The judgment stayed mine: every architectural decision, every credential path and every release. The discipline that mattered most turned out to be verification: proving a thing works the way a person will use it, not the way the test happened to be written. Fifteen hundred commits in six weeks is the result.
+**An operating contract for AI-assisted engineering.** I built Slate using Claude Code as the primary engineering tool, working under a written contract that fixes the constraints already decided, the workflow (plan first and get the plan approved, one issue per branch, a pull request into `main`, and `main` always runnable) and the definition of done. The judgment stayed mine: every architectural decision, every credential path and every release. The discipline that mattered most turned out to be verification: proving a thing works the way a person will use it, not the way the test happened to be written. Sixteen hundred commits in six weeks is the result.
 
 ## What is not here
 
