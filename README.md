@@ -145,34 +145,34 @@ Some of these are reverse-engineered, because the vendor has no public API. Each
 ```mermaid
 flowchart LR
   subgraph clients["Thin clients (no credentials, no state)"]
-    T["Wall panels<br/>native Kotlin, Android"]
-    P["Phone app<br/>PWA"]
-    V["Security viewer<br/>browser, WebRTC"]
-    A["Admin panel<br/>browser"]
+    T["Wall panels<br>native Kotlin, Android"]
+    P["Phone app<br>PWA"]
+    V["Security viewer<br>browser, WebRTC"]
+    A["Admin panel<br>browser"]
   end
 
   subgraph server["Slate server (one container, LAN only)"]
-    H["WebSocket hub<br/>state push, actions, presence"]
-    S["State store<br/>single source of truth"]
-    C["Config store<br/>SQLite"]
-    I["Integrations<br/>one module per vendor"]
-    D["Detection & recording<br/>motion, sound, faces"]
-    R["WebRTC signalling<br/>LAN direct, no TURN"]
+    H["WebSocket hub<br>state push, actions, presence"]
+    S["State store<br>single source of truth"]
+    C["Config store<br>SQLite"]
+    I["Integrations<br>one module per vendor"]
+    D["Detection and recording<br>motion, sound, faces"]
+    R["WebRTC signalling<br>LAN direct, no TURN"]
   end
 
   subgraph devices["The house"]
-    L["Hue · Lutron · Matter · Kasa · Shelly"]
-    K["Ecobee · locks · garage"]
-    M["Cast · Spotify"]
-    W["Pool · spa · irrigation · vacuum"]
-    E["Cameras · doorbell"]
+    L["Hue, Lutron, Matter, Kasa, Shelly"]
+    K["Ecobee, locks, garage"]
+    M["Cast, Spotify"]
+    W["Pool, spa, irrigation, vacuum"]
+    E["Cameras, doorbell"]
   end
 
   T <-->|WebSocket| H
   P <-->|WebSocket| H
   A --> C
   V <-->|WebRTC| R
-  T -->|camera + mic| R
+  T -->|camera and mic| R
   R --> D
   H <--> S
   S <--> I
