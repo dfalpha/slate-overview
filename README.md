@@ -27,6 +27,8 @@ The two public repositories:
 | **slate-overview** (this one) | What Slate is and how it is built, in words and pictures |
 | [slate-dist](https://github.com/dfalpha/slate-dist) | The installer scripts and compose files a Slate server fetches. A CI-generated mirror of released files, never the source |
 
+The idea itself, and a form for telling me whether you would want it in your house, is at **[slatepanel.app](https://slatepanel.app)**.
+
 I'm [Shawn Snider](https://shawnsnider.me). The longer story is on that site.
 
 ## By the numbers
@@ -236,7 +238,7 @@ Every switched device is named and typed once. The ones marked as lights join **
 
 ## What is not here
 
-The source, the house-specific configuration, and the vendor protocol details. If you are evaluating the engineering, [shawnsnider.me](https://shawnsnider.me) has the rest of the story, and I am happy to walk through the code in conversation.
+The source, the house-specific configuration, and the vendor protocol details. If you are evaluating the engineering, [shawnsnider.me](https://shawnsnider.me) has the rest of the story, and I am happy to walk through the code in conversation. If you are wondering whether you would want Slate in your own house, [slatepanel.app](https://slatepanel.app) is the place to say so.
 
 ---
 
