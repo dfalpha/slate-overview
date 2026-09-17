@@ -18,13 +18,13 @@ Wall-mounted panels that are always on, one server that owns every integration, 
 
 ## What this repository is
 
-Slate is a home control system I designed and built in 2026, first for my own house and now as a commercial product. The source is private: publishing the code for the locks, cameras and access systems in my own home would be a questionable demonstration of engineering judgment. This repository is the public description of what Slate is, what it controls, and how it is built.
+Slate is a home control system I designed and built in 2026 for my own house. It is not a product, and it may never be one. The source is private: publishing the code for the locks, cameras and access systems in my own home would be a questionable demonstration of engineering judgment. This repository is the public description of what Slate is, what it controls, and how it is built.
 
 The two public repositories:
 
 | Repository | What it holds |
 |---|---|
-| **slate-overview** (this one) | The product and its architecture, in words and pictures |
+| **slate-overview** (this one) | What Slate is and how it is built, in words and pictures |
 | [slate-dist](https://github.com/dfalpha/slate-dist) | The installer scripts and compose files a Slate server fetches. A CI-generated mirror of released files, never the source |
 
 I'm [Shawn Snider](https://shawnsnider.me). The longer story is on that site.
@@ -222,17 +222,13 @@ Pico remotes get a separate Action for press, double-press and long-press, plus 
 
 Every switched device is named and typed once. The ones marked as lights join **Lighting Groups** and **Scenes**; everything else gets its own tile. Adding a vendor means one server folder and a setup page, not changes across five clients.
 
-### Licensing without a phone-home
-
-A licence is an Ed25519-signed artifact the server verifies offline against a public key it already holds. There is no permission check that needs the internet, which is why the house keeps working when the vendor is unreachable, and why it would keep working if the vendor no longer existed. The service that mints licences runs in its own container on a network with no gateway, and trusted keys are distributed as a signed key set with a monotonic serial, so a key rotation reaches every install through normal renewal and cannot be rolled back.
-
 ## How it is built
 
 **Hardware that is boring on purpose.** The server runs on any x86-64 machine with Docker and a wired connection. The panels are ordinary 10.5-inch Android tablets, mounted flush in the wall with a low-voltage feed. Nothing is proprietary and nothing locks you in.
 
 **Develop against fake devices.** The server can serve plausible Hue bridges, Lutron zones and Pico remotes, Kasa plugs, Shelly relays and the rest, so no hardware is needed to work on it. The tablet app builds a `dev` flavour that installs alongside production with its own name and icon, so one test device can carry both.
 
-**Promotion is deliberate, not automatic.** Every merge to `main` publishes a server image and distributes a tablet build to the dev group. Production moves only when someone pushes a version tag, or dispatches the tablet promotion with the exact CI run whose build they want. What is promoted is the artifact CI already built and tested, and the released installer files are mirrored to [slate-dist](https://github.com/dfalpha/slate-dist) on every promotion.
+**Promotion is deliberate, not automatic.** Every merge to `main` publishes a server image and distributes a tablet build to the dev group. The house moves to a new version only when I push a version tag, or dispatch the tablet promotion with the exact CI run whose build I want. What is promoted is the artifact CI already built and tested, and the installer files are mirrored to [slate-dist](https://github.com/dfalpha/slate-dist) on every promotion.
 
 **Tested at the cheapest level that proves the point.** Roughly 7,400 automated tests across the server, the shared package, the two web clients and the tablet app. Anything that needs a real device goes on a human-only checklist.
 
@@ -240,8 +236,8 @@ A licence is an Ed25519-signed artifact the server verifies offline against a pu
 
 ## What is not here
 
-The source, the house-specific configuration, and the vendor protocol details. If you are evaluating the engineering rather than the product, [shawnsnider.me](https://shawnsnider.me) has the rest of the story, and I am happy to walk through the code in conversation.
+The source, the house-specific configuration, and the vendor protocol details. If you are evaluating the engineering, [shawnsnider.me](https://shawnsnider.me) has the rest of the story, and I am happy to walk through the code in conversation.
 
 ---
 
-<p align="center"><sub>Designed, built and supported in Ottawa, Canada. · <a href="https://www.linkedin.com/in/shawnsnider">LinkedIn</a> · shawn@shawnsnider.me</sub></p>
+<p align="center"><sub>Designed and built in Ottawa, Canada. · <a href="https://www.linkedin.com/in/shawnsnider">LinkedIn</a> · shawn@shawnsnider.me</sub></p>
