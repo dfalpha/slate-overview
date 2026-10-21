@@ -33,16 +33,17 @@ I'm [Shawn Snider](https://shawnsnider.me). The longer story is on that site.
 
 ## By the numbers
 
-Measured on 17 September 2026, six weeks after the first commit.
+Measured on 20 October 2026, ten and a half weeks after the first commit.
 
 | | |
 |---|---|
 | From empty repository to production in my house | **6 weeks** |
-| Lines of TypeScript and Kotlin | **~370,000** |
-| Automated tests | **~9,900** |
-| Device and service integrations | **18** |
-| Codebases | **5**: server, tablet, admin, phone, viewer |
-| Commits | **1,600+** |
+| Lines of TypeScript, Kotlin and Swift | **~920,000** |
+| Automated tests | **~19,700** |
+| Device and service integrations | **26** |
+| Codebases | **7**: server, wall tablet, admin, viewer, phone web app, Android phone, iPhone |
+| Commits | **2,700+** |
+| Merged pull requests | **1,900+** |
 
 ## The whole house, in one place
 
@@ -60,7 +61,9 @@ When nobody is using a panel, the controls fade away and your own photos take ov
 
 <img src="img/tiles-lights.png" alt="Tiles for the kitchen island at 78%, a Dinner scene across four groups, and main-floor lights partially on" width="520">
 
-Hue bulbs and Lutron dimmers behave like lights, not competing ecosystems. A room gets one control even when several systems are behind it. Scenes can cross brands, so **Dinner**, **Movie** and **Away** describe what you want the room to do rather than which manufacturer's app to open.
+Hue bulbs, Lutron dimmers, LIFX and Govee lamps and WLED strips behave like lights, not competing ecosystems. A room gets one control even when several systems are behind it, and two bulbs in one fixture can be paired so they act as one light. Scenes can cross brands, so **Dinner**, **Movie** and **Away** describe what you want the room to do rather than which manufacturer's app to open.
+
+Put music on and the lights can follow it: every Hue bridge, plus LIFX, Govee and WLED, driven as one rig that reacts to the beat, the hits and the drops, keeps itself in time by listening through the wall panels' microphones, and crossfades from one song to the next. A backyard rig gets lighting roles, like a small club. The intense mode carries a photosensitivity warning and is off unless you allow it.
 
 And Slate reports what actually happened. If one lamp did not respond, the room does not pretend everything is off.
 
@@ -100,13 +103,23 @@ Some of the most useful tiles do not control anything. Weather for the next few 
 
 The important part is that each step reports back. If one thing fails, the rest still happen, and Slate tells you what did not.
 
+Anything switchable can also turn itself off: the fireplace after two hours, the garden lights at midnight. And when a new device connects, Slate adds the alerts most households would want, such as the garage left open after dark, a lock left unlocked or a frost warning for the pool, marks each one as added by Slate, and lets you change or remove it.
+
+### Energy & the schedule
+
+Electricity rates (tiered, time-of-use and overnight plans), what the pool and the hot tub actually cost to run, and a schedule that moves the pump and the spa heater into the cheapest hours without letting either drop below a safe minimum. One day-and-week view shows everything the house is going to do, and when. Battery levels, the furnace filter and your own maintenance items come round as reminders.
+
+### The household
+
+Who is home, from the phones on the home Wi-Fi, with no location permission. A shopping list, a to-do list and a meal plan on the wall and by voice. Photo albums, chosen per panel, with the dates the photos were taken.
+
 ### And on your phone
 
 <p>
   <img src="img/spa-phone.jpg" alt="Slate phone app showing the hot tub: temperature set to 102 degrees, pumps, lights and water chemistry reference" width="260" align="left">
 </p>
 
-The phone app is the same controls when you are out, driven by the same server. It is deliberately a thin client: control, status, routines and intercom, and none of the always-on behaviour that only makes sense on a wall.
+The phone apps, native on Android and iPhone, are the same controls when you are out, driven by the same server. They are deliberately thin clients: control, status, routines, alerts and intercom, and none of the always-on behaviour that only makes sense on a wall. Away from home they reach the house through your own VPN or an optional remote-access tunnel that the house opens outward, encrypted end to end.
 
 <br clear="all">
 
@@ -118,18 +131,21 @@ Everything below runs through the server. No panel, phone or watch ever talks to
 |---|---|---|
 | Lighting | Philips Hue | Multi-bridge. Several bridges behave as one namespace; one going offline does not stall the others |
 | | Lutron Caséta & RA2 | Local LEAP connection. Dimmers, keypads, shades, and Pico remotes as buttons |
-| | Matter lighting | Any Matter-certified bulb or switch, on Slate's own fabric |
+| | LIFX, Govee | Over their local LAN protocols, including as light-show targets |
+| | WLED | LED strips as fast light-show targets |
 | | TP-Link Kasa, Shelly | Plugs and relays behind the same vendor-neutral layer |
+| | Bond | Ceiling fans and fireplaces behind a Bond bridge |
 | Climate | Ecobee | Over HomeKit rather than the manufacturer API, which stopped accepting new applications years ago |
-| | Matter thermostats | Direct, on the local fabric |
 | Security | eufy cameras & doorbell | Live view, motion events and recording. Analysis runs on the server |
-| | Matter locks | Lock, unlock and true state. Includes locks whose own app refuses remote commands |
-| | ONVIF / RTSP cameras | Any camera that speaks ONVIF or plain RTSP |
+| | Matter locks | Lock, unlock and true state, on Slate's own Matter fabric. Includes locks whose own app refuses remote commands |
 | Water & outdoors | Rachio irrigation | Zones, schedules and the countdown to the next run |
-| | Hayward OmniLogic | Pool pump, heater, lights and water temperature |
+| | Hayward OmniLogic | Pool pump, heater, lights, freeze protection and water temperature |
 | | Arctic Spas | Spa temperature, pumps, lights and filtration |
+| | Polaris (iAquaLink) & Aiper pool robots | Status, cycles and maintenance reminders |
+| | Tuya hose timers | Watering on the appliance tile, skipped when frost is forecast |
 | Media | Chromecast & Cast groups | What is playing, where, and control of it from any panel |
 | | Spotify Connect | Rooms appear as Connect targets; playback is driven from the wall |
+| | AirPlay | An iPhone or Mac sees the house's speakers as AirPlay speakers |
 | House | Roborock vacuums | Status, consumables and start/stop per room |
 | | Garage door controllers | Dry-contact relay and reed sensor. Reports true open/closed state rather than guessing from the last command |
 | | Garbage & recycling | Municipal collection calendars, on the panel by the door |
@@ -148,25 +164,25 @@ Some of these are reverse-engineered, because the vendor has no public API. Each
 flowchart LR
   subgraph clients["Thin clients (no credentials, no state)"]
     T["Wall panels<br>native Kotlin, Android"]
-    P["Phone app<br>PWA"]
+    P["Phone apps<br>Android, iPhone, PWA"]
     V["Security viewer<br>browser, WebRTC"]
     A["Admin panel<br>browser"]
   end
 
-  subgraph server["Slate server (one container, LAN only)"]
+  subgraph server["Slate server (one container, bound to the LAN)"]
     H["WebSocket hub<br>state push, actions, presence"]
     S["State store<br>single source of truth"]
     C["Config store<br>SQLite"]
     I["Integrations<br>one module per vendor"]
     D["Detection and recording<br>motion, sound, faces"]
-    R["WebRTC signalling<br>LAN direct, no TURN"]
+    R["WebRTC signalling<br>LAN direct; TURN only off-LAN"]
   end
 
   subgraph devices["The house"]
-    L["Hue, Lutron, Matter, Kasa, Shelly"]
+    L["Hue, Lutron, LIFX, Govee, WLED, Kasa, Shelly, Bond"]
     K["Ecobee, locks, garage"]
     M["Cast, Spotify"]
-    W["Pool, spa, irrigation, vacuum"]
+    W["Pool, spa, irrigation, robots, vacuum"]
     E["Cameras, doorbell"]
   end
 
@@ -198,7 +214,7 @@ flowchart LR
 |---|---|
 | **Server** | Node.js and TypeScript. Owns every integration, the state store, the WebSocket hub, WebRTC signalling, motion and sound detection, recording, the config store, and hosts the admin panel and viewer. Ships as one container image with a reverse proxy in front for TLS |
 | **Wall panel app** | Native Kotlin. Fetches its layout from the server, subscribes to state, renders widgets, sends actions. Always-on display, boot-on-power, night dimming, presence-based fade, photo slideshow, wake-word capture, intercom audio, and front-camera streaming for security. Built against a single Android 10 baseline on purpose |
-| **Phone app** | A PWA served by the server. Same WebSocket and signalling APIs as the panels, with the always-on and capture behaviour deliberately left out |
+| **Phone apps** | Native Android (Kotlin) and iPhone (SwiftUI) apps, plus the original PWA served by the server. Same WebSocket and signalling APIs as the panels, with the always-on and capture behaviour deliberately left out |
 | **Security viewer** | Browser app that streams a panel's camera and microphone over WebRTC, directly on the LAN |
 | **Admin panel** | Browser app that edits all server-side configuration live: rooms, dashboards, widgets, integrations, routines, schedules, people |
 | **Shared package** | Pure derivations that the admin panel and phone app both render from. Source-only, no dependencies, so the two clients cannot drift |
@@ -209,8 +225,9 @@ Each panel holds one WebSocket to the server. State updates flow down, actions a
 
 ### Networking and privacy
 
-- **LAN only.** The server binds to the local network, forwards no ports, opens no tunnel and keeps no persistent connection to anything outside the house. Remote access is your own VPN.
-- **No relay.** WebRTC connects panel to viewer directly. There is no TURN server and no broker in the middle of a camera stream.
+- **LAN first.** The server binds to the local network and forwards no ports. Nothing in the house listens on the public internet.
+- **Remote access is outbound, and optional.** Your own VPN works. So does an optional remote-access tunnel: the house keeps one outbound connection to a broker, which routes a phone's connection into it by name alone. TLS runs end to end from the phone to the house, so the broker never holds a key and cannot read the traffic.
+- **Media stays direct on the LAN.** WebRTC connects panel to viewer directly at home. Only a call with one end outside the house goes through a TURN relay, with short-lived credentials handed to the two ends of that call.
 - **Host networking is mandatory.** Device discovery over mDNS, Matter commissioning and camera streams all need the server genuinely on the same segment as the hardware.
 - **Detection runs on the server, not the panels.** 2018-era tablets cannot analyse video well. They stream; the server analyses and records to its own disk.
 - **Voice stays home.** Wake word on the panel, recognition on the server, and the audio is discarded once the sentence is understood.
@@ -222,7 +239,7 @@ An **Action** is a list of steps: lights, scenes, switches, media, notifications
 
 Pico remotes get a separate Action for press, double-press and long-press, plus hold-to-dim on the rocker buttons. Press timing is measured on the bridge rather than assumed, because Caséta hardware reports only press and release.
 
-Every switched device is named and typed once. The ones marked as lights join **Lighting Groups** and **Scenes**; everything else gets its own tile. Adding a vendor means one server folder and a setup page, not changes across five clients.
+Every switched device is named and typed once. The ones marked as lights join **Lighting Groups** and **Scenes**; everything else gets its own tile. Adding a vendor means one server folder and a setup page, not changes across every client.
 
 ## How it is built
 
@@ -232,9 +249,9 @@ Every switched device is named and typed once. The ones marked as lights join **
 
 **Promotion is deliberate, not automatic.** Every merge to `main` publishes a server image and distributes a tablet build to the dev group. The house moves to a new version only when I push a version tag, or dispatch the tablet promotion with the exact CI run whose build I want. What is promoted is the artifact CI already built and tested, and the installer files are mirrored to [slate-dist](https://github.com/dfalpha/slate-dist) on every promotion.
 
-**Tested at the cheapest level that proves the point.** Roughly 9,900 automated tests across the server, the shared package, the two web clients and the tablet app. Anything that needs a real device goes on a human-only checklist.
+**Tested at the cheapest level that proves the point.** Roughly 19,700 automated tests across the server, the shared package, the web clients, the tablet app and both phone apps. Anything that needs a real device goes on a human-only checklist.
 
-**An operating contract for AI-assisted engineering.** I built Slate using Claude Code as the primary engineering tool, working under a written contract that fixes the constraints already decided, the workflow (plan first and get the plan approved, one issue per branch, a pull request into `main`, and `main` always runnable) and the definition of done. The judgment stayed mine: every architectural decision, every credential path and every release. The discipline that mattered most turned out to be verification: proving a thing works the way a person will use it, not the way the test happened to be written. Sixteen hundred commits in six weeks is the result.
+**An operating contract for AI-assisted engineering.** I built Slate using Claude Code as the primary engineering tool, working under a written contract that fixes the constraints already decided, the workflow (plan first and get the plan approved, one issue per branch, a pull request into `main`, and `main` always runnable) and the definition of done. The judgment stayed mine: every architectural decision, every credential path and every release. The discipline that mattered most turned out to be verification: proving a thing works the way a person will use it, not the way the test happened to be written. Production in six weeks, and more than 2,700 commits in ten, is the result.
 
 ## What is not here
 
